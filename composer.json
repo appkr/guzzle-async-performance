@@ -1,0 +1,16 @@
+{
+    "name": "appkr/client",
+    "require": {
+        "monolog/monolog": "^1.25",
+        "guzzlehttp/guzzle": "^6.5",
+        "symfony/http-foundation": "^4.4",
+        "vlucas/phpdotenv": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Client\\": "src/Client/",
+            "Server\\": "src/Server/",
+            "Common\\": "src/Common/"
+        }
+    }
+}
