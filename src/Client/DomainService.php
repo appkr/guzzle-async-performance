@@ -26,7 +26,7 @@ class DomainService
             throw $e;
         }
 
-        // Simulate costly job
+        // Simulate expensive job
         usleep(10000); // 10ms
 
         return json_decode($response->getBody()->getContents(), true);
@@ -45,7 +45,7 @@ class DomainService
                 throw $e;
             });
 
-        // Simulate costly job
+        // Simulate expensive job
         usleep(10000); // 10ms
 
         return $promise->wait();
@@ -53,7 +53,7 @@ class DomainService
 
     private function getLoggableClient(string $context): Client
     {
-        $logger = Logger::create("client.RequestService.{$context}", __DIR__.'/../../logs/client.log');
+        $logger = Logger::create("client.DomainService.{$context}", __DIR__.'/../../logs/client.log');
 
         $afterMiddleware =  function (RequestInterface $req, array $options = [], PromiseInterface $promise = null) use ($logger) {
             $onFulfilledCallback = function (ResponseInterface $res) use ($req, $logger) {
