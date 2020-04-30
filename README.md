@@ -19,15 +19,15 @@ The answer is YES!!! **Guzzle `sendAsync()` shows better performance than `send(
 
 #### 2 Run apache bench
 > <small>scenario #1</small> **`SERVER_URI=httpbin.org/get`**<br/>
-> macbook -(curl call)-> http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync -(guzzle call)-> httpbin.org/get
+> macbook -(curl call)-> http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync -(guzzle call)-> httpbin.org/get
 
 -c 5 -n 100|Time taken for tests|Requests per second
 ---|---|---
 sync|11.022 seconds|9.07 [#/sec] (mean)
 async|10.910 seconds|9.17 [#/sec] (mean)
 
-> <small>scenario #2</small> **`SERVER_URI=http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com`**<br/>
->  macbook -(curl call)-> http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync -(guzzle call)-> http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com
+> <small>scenario #2</small> **`SERVER_URI=http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com`**<br/>
+>  macbook -(curl call)-> http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync -(guzzle call)-> http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com
 
 -c 10 -n 300|Time taken for tests|Requests per second
 ---|---|---
@@ -43,7 +43,7 @@ async|2.428 seconds|123.57 [#/sec] (mean)
 # ------------------------------------------------------------------------------
 
 # This command will make 100 requests using 5 threads
-~ $ ab -c 5 -n 100 -H "Accept: application/json" http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync
+~ $ ab -c 5 -n 100 -H "Accept: application/json" http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync
 
 # Concurrency Level:      5
 # Time taken for tests:   11.022 seconds
@@ -74,7 +74,7 @@ async|2.428 seconds|123.57 [#/sec] (mean)
 #   99%    884
 #  100%    884 (longest request)
 
-~ $ ab -c 5 -n 100 -H "Accept: application/json" http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/async
+~ $ ab -c 5 -n 100 -H "Accept: application/json" http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/async
 # Concurrency Level:      5
 # Time taken for tests:   10.910 seconds
 # Complete requests:      100
@@ -105,10 +105,10 @@ async|2.428 seconds|123.57 [#/sec] (mean)
 #  100%    667 (longest request)
 
 # ------------------------------------------------------------------------------
-# SERVER_URI=http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com
+# SERVER_URI=http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com
 # ------------------------------------------------------------------------------
 
-~ $ ab -c 10 -n 300 -H "Accept: application/json" http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync
+~ $ ab -c 10 -n 300 -H "Accept: application/json" http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/sync
 # Concurrency Level:      10
 # Time taken for tests:   4.509 seconds
 # Complete requests:      300
@@ -138,7 +138,7 @@ async|2.428 seconds|123.57 [#/sec] (mean)
 #   99%   2746
 #  100%   2841 (longest request)
 
-~ $ ab -c 10 -n 300 -H "Accept: application/json" http://quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/async
+~ $ ab -c 10 -n 300 -H "Accept: application/json" http://guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com/async
 # Concurrency Level:      10
 # Time taken for tests:   2.428 seconds
 # Complete requests:      300
@@ -174,10 +174,10 @@ async|2.428 seconds|123.57 [#/sec] (mean)
 
 Clone and build
 ```bash
-~ $ git clone git@github.com:appkr/quzzle-async-performance.git
-~ $ cd quzzle-async-performance
-~/quzzle-async-performance $ cp .env.example .env
-~/quzzle-async-performance $ composer install 
+~ $ git clone git@github.com:appkr/guzzle-async-performance.git
+~ $ cd guzzle-async-performance
+~/guzzle-async-performance $ cp .env.example .env
+~/guzzle-async-performance $ composer install 
 ```
 
 Run local server for the server and the client
@@ -185,10 +185,10 @@ Run local server for the server and the client
 > So, it does not fit on the purpose of benchmark test. To do the benchmark, we must use production-level web server.
 ```bash
 # server
-~/quzzle-async-performance $ php -S localhost:8001 -t public
+~/guzzle-async-performance $ php -S localhost:8001 -t public
 
 # client
-~/quzzle-async-performance $ php -S localhost:8000  -t public
+~/guzzle-async-performance $ php -S localhost:8000  -t public
 ```
 
 Make a request
@@ -203,10 +203,10 @@ Make a request
 Monitor log
 ```bash
 # server
-~/quzzle-async-performance $ tail -f logs/server.log
+~/guzzle-async-performance $ tail -f logs/server.log
 
 # client
-~/quzzle-async-performance $ tail -f logs/client.log
+~/guzzle-async-performance $ tail -f logs/client.log
 ```
 
 #### 4 AWS Elasticbeanstalk Provisioning Logs
@@ -216,11 +216,11 @@ Monitor log
 
 Create eb(elasticbeanstalk) application
 ```bash
-~/quzzle-async-performance $ eb init --profile appkr
+~/guzzle-async-performance $ eb init --profile appkr
 # 10) ap-northeast-2 : Asia Pacific (Seoul)
 
 # Enter Application Name
-# (default is "quzzle-async-performance"):
+# (default is "guzzle-async-performance"):
 
 # It appears you are using PHP. Is this correct?
 # (Y/n):
@@ -239,18 +239,18 @@ Create eb(elasticbeanstalk) application
 
 Create eb(elasticbeanstalk) environment
 ```bash
-~/quzzle-async-performance $ eb create benchmark -c quzzle-async-performance -i t2.small --envvars SERVER_URI=http://httpbin.org/get --profile appkr --region ap-northeast-2
+~/guzzle-async-performance $ eb create benchmark -c guzzle-async-performance -i t2.small --envvars SERVER_URI=http://httpbin.org/get --profile appkr --region ap-northeast-2
 # Creating application version archive "app-65cf-200426_105847".
-# Uploading quzzle-async-performance/app-65cf-200426_105847.zip to S3. This may take a while.
+# Uploading guzzle-async-performance/app-65cf-200426_105847.zip to S3. This may take a while.
 # Upload Complete.
 # Environment details for: benchmark
-#   Application name: quzzle-async-performance
+#   Application name: guzzle-async-performance
 #   Region: ap-northeast-2
 #   Deployed Version: app-65cf-200426_105847
 #   Environment ID: e-uzfan9cb4a
 #   Platform: arn:aws:elasticbeanstalk:ap-northeast-2::platform/PHP 7.3 running on 64bit Amazon Linux/2.9.4
 #   Tier: WebServer-Standard-1.0
-#   CNAME: quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com
+#   CNAME: guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com
 #   Updated: 2020-04-26 01:58:49.361000+00:00
 # Printing Status:
 # 2020-04-26 01:58:48    INFO    createEnvironment is starting.
@@ -265,13 +265,13 @@ Create eb(elasticbeanstalk) environment
 # 2020-04-26 02:00:27    INFO    Created Auto Scaling group policy named: arn:aws:autoscaling:ap-northeast-2:628988759087:scalingPolicy:5e95b072-5c6d-4063-8973-622f6f4e70e2:autoScalingGroupName/awseb-e-uzfan9cb4a-stack-AWSEBAutoScalingGroup-O6FEUW3O1T0X:policyName/awseb-e-uzfan9cb4a-stack-AWSEBAutoScalingScaleUpPolicy-1AFRE9R89DSNE
 # 2020-04-26 02:00:28    INFO    Created CloudWatch alarm named: awseb-e-uzfan9cb4a-stack-AWSEBCloudwatchAlarmHigh-7LSRCD6OU5OT
 # 2020-04-26 02:00:28    INFO    Created CloudWatch alarm named: awseb-e-uzfan9cb4a-stack-AWSEBCloudwatchAlarmLow-1UB1UNQAXQPO
-# 2020-04-26 02:00:59    INFO    Application available at quzzle-async-performance.ap-northeast-2.elasticbeanstalk.com.
+# 2020-04-26 02:00:59    INFO    Application available at guzzle-async-performance.ap-northeast-2.elasticbeanstalk.com.
 # 2020-04-26 02:01:00    INFO    Successfully launched environment: benchmark
 ```
 
 Deploy a new version
 ```bash
-~/quzzle-async-performance $ eb deploy benchmark  --label="v0.0.5" --verbose --timeout=10 --profile appkr --region ap-northeast-2
+~/guzzle-async-performance $ eb deploy benchmark  --label="v0.0.5" --verbose --timeout=10 --profile appkr --region ap-northeast-2
 # INFO: Deploying code to benchmark in region ap-northeast-2
 # Creating application version archive "v0.0.5".
 # INFO: creating zip using git archive HEAD
@@ -296,8 +296,8 @@ Deploy a new version
 # src/Common/Logger.php
 # src/Server/
 # src/Server/FooBarController.php
-# INFO: Uploading archive to s3 location: quzzle-async-performance/v0.0.5.zip
-# Uploading quzzle-async-performance/v0.0.5.zip to S3. This may take a while.
+# INFO: Uploading archive to s3 location: guzzle-async-performance/v0.0.5.zip
+# Uploading guzzle-async-performance/v0.0.5.zip to S3. This may take a while.
 # Upload Complete.
 # INFO: Creating AppVersion v0.0.5
 # 2020-04-26 03:20:27    INFO    Environment update is starting.
