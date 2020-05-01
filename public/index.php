@@ -18,6 +18,7 @@ $map = [
     '/' => Server\FooBarController::class,
     '/sync' => Client\SyncController::class,
     '/async' => Client\AsyncController::class,
+    '/pool' => Client\PoolController::class,
 ];
 
 $path = $request->getPathInfo();

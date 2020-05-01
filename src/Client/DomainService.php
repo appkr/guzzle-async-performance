@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
@@ -21,7 +22,8 @@ class DomainService
         ]);
 
         try {
-            $response = $this->getLoggableClient('sync')->send($request);
+            $httpClient = $this->getLoggableClient('sync');
+            $response = $httpClient->send($request);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -37,7 +39,8 @@ class DomainService
         $request = new Request('GET', getenv("SERVER_URI"), [
             "accept" => "application/json",
         ]);
-        $promise = $this->getLoggableClient('async')->sendAsync($request)
+        $httpClient = $this->getLoggableClient('async');
+        $promise = $httpClient->sendAsync($request)
             ->then(function (ResponseInterface $response) use (&$promise) {
                 $content = $response->getBody()->getContents();
                 return json_decode($content, true);
@@ -49,6 +52,40 @@ class DomainService
         usleep(10000); // 10ms
 
         return $promise->wait();
+    }
+
+    public function pool(): bool
+    {
+        $httpClient = $this->getLoggableClient('pool');
+
+        // Simulate get a resource from a remote service
+        $requests[] = new Request('GET', 'http://httpbin.org/get', [
+            "accept" => "application/json",
+        ]);
+
+        // Simulate changing some state of a remote resource
+        $requests[] = new Request('PUT', 'http://httpbin.org/put', [
+            "accept" => "application/json",
+            "content-type" => "application/json",
+        ], json_encode(['foo' => 'bar']));
+
+        $pool = new Pool($httpClient, $requests, [
+            'fulfilled' => function (ResponseInterface $response, int $index) {
+                $content = $response->getBody()->getContents();
+                return json_decode($content, true);
+            },
+            'rejected' => function (RequestException $e, int $index) {
+                $content = $e->getResponse()->getBody()->getContents();
+                return json_decode($content, true);
+            }
+        ]);
+
+        // Simulate expensive job
+        usleep(500000); // 500ms
+
+        $pool->promise()->wait();
+
+        return true;
     }
 
     private function getLoggableClient(string $context): Client
